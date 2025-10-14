@@ -1,6 +1,6 @@
 {
   "name": "@devzolo/ts-run",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Execute TypeScript/JavaScript with the runtime relative to your package manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -57,4 +57,3 @@
     "node": ">=22.6.0"
   }
 }
-

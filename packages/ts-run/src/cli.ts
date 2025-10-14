@@ -30,6 +30,9 @@ function showHelp() {
 	);
 	console.log("  - Deno: --env=<file>");
 	console.log("  - Node/Bun: --env-file <file>");
+	console.log(
+		"\nDeno security flags (--allow-*, -A) are forwarded only when Deno is detected.",
+	);
 	console.log("\nAutomatic TypeScript support:");
 	console.log(
 		"  - Node.js: Automatically adds --experimental-transform-types for .ts files",
@@ -135,6 +138,47 @@ function getNodeFlags(targetFile: string | null): string {
 	return flags.join(" ");
 }
 
+/**
+ * Checks if an argument matches a Deno security flag
+ */
+function isDenoSecurityFlag(arg: string): boolean {
+	const normalized = arg.toLowerCase();
+	if (normalized === "-a" || normalized === "--allow-all") {
+		return true;
+	}
+
+	return normalized.startsWith("--allow-");
+}
+
+/**
+ * Filters out Deno-only security flags when running on other runtimes
+ */
+function filterArgsForRuntime(
+	args: string[],
+	packageManager: string,
+	targetFile: string | null,
+): string[] {
+	if (packageManager === "deno") {
+		return args;
+	}
+
+	if (!targetFile) {
+		return args.filter((arg) => !isDenoSecurityFlag(arg));
+	}
+
+	const targetIndex = args.indexOf(targetFile);
+	if (targetIndex === -1) {
+		return args.filter((arg) => !isDenoSecurityFlag(arg));
+	}
+
+	const beforeTarget = args
+		.slice(0, targetIndex)
+		.filter((arg) => !isDenoSecurityFlag(arg));
+	const afterTarget = args.slice(targetIndex);
+
+	return beforeTarget.concat(afterTarget);
+}
+
 function main() {
 	const args = process.argv.slice(2);
 
@@ -186,7 +230,14 @@ function main() {
 		}
 
 		// Add remaining arguments (script and its args)
-		command += ` ${remainingArgs.join(" ")}`;
+		const sanitizedArgs = filterArgsForRuntime(
+			remainingArgs,
+			packageManager,
+			targetFile,
+		);
+		if (sanitizedArgs.length > 0) {
+			command += ` ${sanitizedArgs.join(" ")}`;
+		}
 
 		execSync(command, {
 			stdio: "inherit",

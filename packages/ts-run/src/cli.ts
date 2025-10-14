@@ -166,7 +166,11 @@ function filterArgsForRuntime(
 		return args.filter((arg) => !isDenoSecurityFlag(arg));
 	}
 
+<<<<<<< HEAD
 	const targetIndex = args.indexOf(targetFile);
+=======
+	const targetIndex = args.findIndex((arg) => arg === targetFile);
+>>>>>>> 092b26ac4f26ad016408c72665ea2bdf9430782a
 	if (targetIndex === -1) {
 		return args.filter((arg) => !isDenoSecurityFlag(arg));
 	}

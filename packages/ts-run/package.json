@@ -1,6 +1,6 @@
 {
   "name": "@devzolo/ts-run",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Execute TypeScript/JavaScript with the runtime relative to your package manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -45,7 +45,8 @@
   "homepage": "https://github.com/devzolo/ts-run#readme",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
   },
   "devDependencies": {
     "@types/node": "^24.7.2",

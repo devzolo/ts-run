@@ -57,6 +57,10 @@ ts-run --env .env script.ts
 - **Deno**: Converts to `--env=.env`
 - **Node.js/Bun**: Converts to `--env-file .env`
 
+## Deno Security Flags
+
+You can pass Deno security flags such as `--allow-net`, `--allow-read`, or `-A` when the runtime is detected as Deno. These flags are automatically ignored for Node.js and Bun so they do not trigger unknown option errors.
+
 ## Requirements
 
 - **Node.js**: ≥22.6.0 (for TypeScript support)

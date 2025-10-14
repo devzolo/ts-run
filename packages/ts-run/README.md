@@ -12,7 +12,7 @@ Execute TypeScript and JavaScript files with the runtime relative to your packag
 ## Installation
 
 ```bash
-npm install -g ts-run
+npm install -g @devzolo/ts-run
 ```
 
 ## Usage

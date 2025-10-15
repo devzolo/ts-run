@@ -1,6 +1,6 @@
 {
   "name": "@devzolo/ts-run",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Execute TypeScript/JavaScript and package.json scripts with the appropriate runtime and package manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

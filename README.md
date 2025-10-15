@@ -4,7 +4,7 @@ Monorepo for ts-run and related packages.
 
 ## Packages
 
-- [`ts-run`](./packages/ts-run) - Execute TypeScript/JavaScript with the runtime relative to your package manager
+- [`ts-run`](./packages/ts-run) - Execute TypeScript/JavaScript with the runtime relative to your package manager (includes `ts-run` and `ts-task` CLIs)
 
 ## Development
 

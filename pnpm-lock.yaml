@@ -30,6 +30,15 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/ts-task:
+    devDependencies:
+      '@types/node':
+        specifier: ^24.7.2
+        version: 24.7.2
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
 packages:
 
   '@babel/runtime@7.28.4':

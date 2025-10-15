@@ -1,13 +1,11 @@
 # ts-run
 
-Execute TypeScript and JavaScript files with the runtime relative to your package manager.
+Execute TypeScript/JavaScript files and package.json scripts with the appropriate runtime and package manager.
 
-## Features
+## Package includes 2 CLIs
 
-- 🚀 **Auto-detects runtime** based on your package manager (npm/yarn/pnpm → Node.js, bun → Bun, deno → Deno)
-- 📦 **Native TypeScript support** for Node.js via `--experimental-transform-types`
-- 🌍 **Unified `.env` support** with automatic format conversion per runtime
-- 🔇 **Silent execution** - clean output without verbose logs
+- **`ts-run`** - Execute TypeScript/JavaScript files with the appropriate runtime
+- **`ts-task`** - Execute package.json scripts with the appropriate package manager
 
 ## Installation
 
@@ -15,7 +13,20 @@ Execute TypeScript and JavaScript files with the runtime relative to your packag
 npm install -g @devzolo/ts-run
 ```
 
-## Usage
+---
+
+## ts-run CLI
+
+Execute TypeScript and JavaScript files with the runtime relative to your package manager.
+
+### Features
+
+- 🚀 **Auto-detects runtime** based on your package manager (npm/yarn/pnpm → Node.js, bun → Bun, deno → Deno)
+- 📦 **Native TypeScript support** for Node.js via `--experimental-transform-types`
+- 🌍 **Unified `.env` support** with automatic format conversion per runtime
+- 🔇 **Silent execution** - clean output without verbose logs
+
+### Usage
 
 ```bash
 # Execute TypeScript files directly
@@ -28,7 +39,7 @@ ts-run --env .env app.ts
 ts-run server.ts --port 3000
 ```
 
-## How it Works
+### How it Works
 
 `ts-run` detects your package manager and uses the appropriate runtime:
 
@@ -46,7 +57,7 @@ Detection is based on lock files:
 - `bun.lockb` → Bun
 - `deno.json` → Deno
 
-## Environment Files
+### Environment Files
 
 The `--env` and `--env-file` flags automatically convert to the correct format:
 
@@ -57,16 +68,11 @@ ts-run --env .env script.ts
 - **Deno**: Converts to `--env=.env`
 - **Node.js/Bun**: Converts to `--env-file .env`
 
-## Deno Security Flags
+### Deno Security Flags
 
 You can pass Deno security flags such as `--allow-net`, `--allow-read`, or `-A` when the runtime is detected as Deno. These flags are automatically ignored for Node.js and Bun so they do not trigger unknown option errors.
 
-## Requirements
-
-- **Node.js**: ≥22.6.0 (for TypeScript support)
-- **Bun/Deno**: Any version (native TypeScript)
-
-## Options
+### Options
 
 ```text
 -h, --help                Show help
@@ -75,7 +81,7 @@ You can pass Deno security flags such as `--allow-net`, `--allow-read`, or `-A` 
 --env-file <file>         Load environment file
 ```
 
-## Examples
+### Examples
 
 ```bash
 # TypeScript with environment variables
@@ -87,6 +93,94 @@ ts-run api.ts --host localhost --port 8080
 # Different environments
 ts-run --env .env.production build.ts
 ```
+
+---
+
+## ts-task CLI
+
+Execute package.json scripts with the appropriate package manager automatically.
+
+### Features
+
+- 🚀 **Auto-detects package manager** based on your project (npm, yarn, pnpm, bun, or deno)
+- 📦 **Smart script execution** with the correct command for each package manager
+- 📋 **Script listing** - view all available scripts in your package.json
+- 🎯 **Argument forwarding** - pass arguments to your scripts seamlessly
+
+### Usage
+
+```bash
+# List all available scripts
+ts-task
+
+# Run a script
+ts-task build
+
+# Run a script with arguments
+ts-task dev --port 3000
+
+# List all scripts explicitly
+ts-task --list
+```
+
+### How it Works
+
+`ts-task` detects your package manager and uses the appropriate command:
+
+| Package Manager | Command                |
+| --------------- | ---------------------- |
+| npm             | `npm run <script>`     |
+| yarn            | `yarn run <script>`    |
+| pnpm            | `pnpm run <script>`    |
+| bun             | `bun run <script>`     |
+| deno            | `deno task <script>`   |
+
+### Options
+
+```text
+-h, --help       Show help message
+-v, --version    Show version number
+-l, --list       List all available scripts
+```
+
+### Examples
+
+```bash
+# List all available scripts in package.json
+ts-task
+
+# Run build script
+ts-task build
+
+# Run dev script with custom port
+ts-task dev --port 8080
+
+# Run test script with watch mode
+ts-task test --watch
+```
+
+### Why ts-task?
+
+Instead of remembering different commands for different package managers:
+
+```bash
+# Without ts-task
+npm run build    # if using npm
+yarn run build   # if using yarn
+pnpm run build   # if using pnpm
+bun run build    # if using bun
+deno task build  # if using deno
+
+# With ts-task
+ts-task build    # works with any package manager!
+```
+
+---
+
+## Requirements
+
+- **Node.js**: ≥22.6.0 (for TypeScript support)
+- **Bun/Deno**: Any version (native TypeScript)
 
 ## License
 

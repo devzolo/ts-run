@@ -5,6 +5,11 @@
 ### Patch Changes
 
 - 82287b6: add support for Deno security flags and update CLI help text
+- Added new `ts-task` CLI for executing package.json scripts with the appropriate package manager
+  - Auto-detects package manager (npm, yarn, pnpm, bun, deno)
+  - Lists available scripts from package.json
+  - Smart command execution based on detected package manager
+  - Seamless argument forwarding to scripts
 
 All notable changes to this project will be documented in this file.
 

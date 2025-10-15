@@ -1,11 +1,12 @@
 {
   "name": "@devzolo/ts-run",
   "version": "0.0.2",
-  "description": "Execute TypeScript/JavaScript with the runtime relative to your package manager",
+  "description": "Execute TypeScript/JavaScript and package.json scripts with the appropriate runtime and package manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "ts-run": "./dist/cli.js"
+    "ts-run": "./dist/cli-run.js",
+    "ts-task": "./dist/cli-task.js"
   },
   "files": [
     "dist",
@@ -32,7 +33,13 @@
     "env",
     "package-manager",
     "ts",
-    "tsx"
+    "tsx",
+    "task",
+    "runner",
+    "script",
+    "npm",
+    "yarn",
+    "pnpm"
   ],
   "author": "devzolo",
   "license": "MIT",

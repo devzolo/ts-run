@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **Decorator Support**: Automatic detection of TypeScript decorators in code
+  - Automatically switches to `tsx` when decorators are detected in Node.js projects
+  - Added `tsx` as optional dependency for decorator transpilation
+  - Provides helpful error messages if tsx is not installed
+  - Native support maintained for Bun and Deno (no extra dependencies needed)
+- Updated help text to mention decorator support
+- Enhanced README with decorator usage examples and documentation
+
+### Technical Details
+
+- Added `hasDecorators()` function to detect decorator syntax in TypeScript files
+- Added `isTsxAvailable()` function to check if tsx is installed
+- Refactored `getNodeFlags()` to `getNodeRuntimeInfo()` to support runtime switching
+- Automatic runtime switching from `node` to `tsx` when decorators are detected
+
 ## 0.1.0
 
 ### Minor Changes

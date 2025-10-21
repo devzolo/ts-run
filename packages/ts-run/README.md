@@ -23,6 +23,7 @@ Execute TypeScript and JavaScript files with the runtime relative to your packag
 
 - 🚀 **Auto-detects runtime** based on your package manager (npm/yarn/pnpm → Node.js, bun → Bun, deno → Deno)
 - 📦 **Native TypeScript support** for Node.js via `--experimental-transform-types`
+- 🎨 **Decorator support** - Automatic detection and tsx integration for Node.js
 - 🌍 **Unified `.env` support** with automatic format conversion per runtime
 - 🔇 **Silent execution** - clean output without verbose logs
 
@@ -56,6 +57,56 @@ Detection is based on lock files:
 - `pnpm-lock.yaml` → pnpm
 - `bun.lockb` → Bun
 - `deno.json` → Deno
+
+### Decorator Support
+
+`ts-run` automatically detects TypeScript decorators in your code and handles them appropriately:
+
+**For Node.js projects:**
+
+- Automatically detects decorator syntax (`@DecoratorName`)
+- Switches to [tsx](https://github.com/privatenumber/tsx) for proper transpilation
+- Requires `tsx` to be installed (added as optional dependency)
+
+**For Bun/Deno:**
+
+- Native decorator support, no additional dependencies needed
+
+**Example with decorators:**
+
+```typescript
+function ClassDecorator(target: any) {
+    console.log("ClassDecorator", target);
+    return target;
+}
+
+@ClassDecorator
+class Person {
+    name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+```
+
+```bash
+# Just run it - decorator detection is automatic!
+ts-run app.ts
+```
+
+**If tsx is not installed**, you'll get a helpful error message:
+
+```bash
+Error: Decorators detected but tsx is not installed.
+To use decorators with Node.js, install tsx:
+  npm install -D tsx
+  # or
+  pnpm add -D tsx
+  # or
+  yarn add -D tsx
+
+Alternatively, use Bun or Deno which have native decorator support.
+```
 
 ### Environment Files
 

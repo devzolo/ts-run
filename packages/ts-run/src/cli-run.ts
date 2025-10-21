@@ -37,7 +37,10 @@ function showHelp() {
 	console.log(
 		"  - Node.js: Automatically adds --experimental-transform-types for .ts files",
 	);
-	console.log("  - Bun/Deno: Native TypeScript support");
+	console.log(
+		"  - Node.js with decorators: Automatically uses tsx (requires tsx to be installed)",
+	);
+	console.log("  - Bun/Deno: Native TypeScript and decorator support");
 }
 
 function showVersion() {
@@ -102,6 +105,20 @@ function isTypeScriptFile(filename: string): boolean {
 }
 
 /**
+ * Checks if the file content contains decorators
+ */
+function hasDecorators(filename: string): boolean {
+	try {
+		const fs = require("node:fs");
+		const content = fs.readFileSync(filename, "utf-8");
+		// Check for decorator syntax: @DecoratorName at the start of a line or after whitespace
+		return /@[A-Z][a-zA-Z0-9_]*/.test(content);
+	} catch {
+		return false;
+	}
+}
+
+/**
  * Extracts the target file from remaining arguments
  */
 function getTargetFile(args: string[]): string | null {
@@ -124,18 +141,57 @@ function getTargetFile(args: string[]): string | null {
 }
 
 /**
- * Builds Node.js specific flags
+ * Checks if tsx is available
  */
-function getNodeFlags(targetFile: string | null): string {
-	const flags: string[] = [];
+function isTsxAvailable(): boolean {
+	try {
+		require.resolve("tsx");
+		return true;
+	} catch {
+		return false;
+	}
+}
 
-	// Add --experimental-transform-types for TypeScript files
-	if (targetFile && isTypeScriptFile(targetFile)) {
+/**
+ * Builds Node.js specific flags and returns runtime info
+ */
+function getNodeRuntimeInfo(targetFile: string | null): {
+	runtime: string;
+	flags: string;
+} {
+	const flags: string[] = [];
+	let runtime = "node";
+
+	// Check if file uses decorators - if so, we need tsx
+	if (targetFile && isTypeScriptFile(targetFile) && hasDecorators(targetFile)) {
+		if (isTsxAvailable()) {
+			// Use tsx which supports decorators
+			runtime = "tsx";
+			// tsx doesn't need extra flags for TypeScript
+		} else {
+			console.error(
+				"\x1b[31mError: Decorators detected but tsx is not installed.\x1b[0m",
+			);
+			console.error(
+				"\x1b[33mTo use decorators with Node.js, install tsx:\x1b[0m",
+			);
+			console.error("  npm install -D tsx");
+			console.error("  # or");
+			console.error("  pnpm add -D tsx");
+			console.error("  # or");
+			console.error("  yarn add -D tsx");
+			console.error(
+				"\n\x1b[33mAlternatively, use Bun or Deno which have native decorator support.\x1b[0m",
+			);
+			throw new Error("tsx is required for decorator support");
+		}
+	} else if (targetFile && isTypeScriptFile(targetFile)) {
+		// Regular TypeScript without decorators - use Node's type stripping
 		flags.push("--experimental-transform-types");
 		flags.push("--no-warnings");
 	}
 
-	return flags.join(" ");
+	return { runtime, flags: flags.join(" ") };
 }
 
 /**
@@ -212,15 +268,16 @@ function main() {
 		// Build command with runtime-specific flags
 		let command = runtime;
 
-		// Add Node.js specific flags (like --experimental-transform-types for TS)
+		// Add Node.js specific flags and potentially switch to tsx for decorators
 		if (
 			packageManager === "npm" ||
 			packageManager === "yarn" ||
 			packageManager === "pnpm"
 		) {
-			const nodeFlags = getNodeFlags(targetFile);
-			if (nodeFlags) {
-				command += ` ${nodeFlags}`;
+			const nodeInfo = getNodeRuntimeInfo(targetFile);
+			command = nodeInfo.runtime;
+			if (nodeInfo.flags) {
+				command += ` ${nodeInfo.flags}`;
 			}
 		}
 

@@ -60,6 +60,9 @@
     "@types/node": "^24.7.2",
     "typescript": "^5.9.3"
   },
+  "optionalDependencies": {
+    "tsx": "^4.19.2"
+  },
   "engines": {
     "node": ">=22.6.0"
   }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- b424926: Migrated the package to native ESM (TypeScript ESNext output, .js import specifiers, runtime compatibility helpers) to ensure Bun/Deno support. The CLI now auto-detects decorators in TS sources, switches to tsx when available, and shows package-manager-specific install guidance when decorators require transpilation.
+
 ## Unreleased
 
 ### Breaking Changes

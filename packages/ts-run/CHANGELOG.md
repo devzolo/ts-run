@@ -2,22 +2,47 @@
 
 ## Unreleased
 
+### Breaking Changes
+
+- **Migrated to ESM (ES Modules)**: The package now uses ES Modules instead of CommonJS
+  - All source files now use `import`/`export` instead of `require()`/`module.exports`
+  - Added `"type": "module"` to package.json
+  - Changed TypeScript compiler to output ESM (`"module": "ESNext"`)
+  - This fixes compatibility with Deno which requires ESM
+  - Node.js (>=22.6.0), Bun, and Deno all support ESM natively
+
 ### Added
 
 - **Decorator Support**: Automatic detection of TypeScript decorators in code
   - Automatically switches to `tsx` when decorators are detected in Node.js projects
-  - Added `tsx` as optional dependency for decorator transpilation
-  - Provides helpful error messages if tsx is not installed
+  - Detects if `tsx` is installed in user's project (via `node_modules`)
+  - Shows personalized install command based on detected package manager (npm/yarn/pnpm)
+  - Provides helpful and informative error messages if tsx is not installed
   - Native support maintained for Bun and Deno (no extra dependencies needed)
+  - Keeps `ts-run` lightweight - no bundled transpiler dependencies
 - Updated help text to mention decorator support
 - Enhanced README with decorator usage examples and documentation
 
 ### Technical Details
 
+**ESM Migration:**
+
+- All imports now use `.js` extensions for ESM compatibility
+- Replaced `require()` with `import` statements
+- Replaced `module.exports` with `export` statements
+- Used `createRequire()` from `node:module` for `require.resolve()` compatibility in ESM
+- Used `import.meta.url` with `fileURLToPath()` to get `__dirname` and `__filename` in ESM
+- Changed `moduleResolution` to `"bundler"` for better ESM support
+
+**Decorator Support:**
+
 - Added `hasDecorators()` function to detect decorator syntax in TypeScript files
-- Added `isTsxAvailable()` function to check if tsx is installed
+- Added `isTsxAvailable()` function to check if tsx is installed in user's project
+- Added `getTsxInstallCommand()` function to generate package manager-specific install commands
 - Refactored `getNodeFlags()` to `getNodeRuntimeInfo()` to support runtime switching
+- `getNodeRuntimeInfo()` now accepts `packageManager` parameter for personalized error messages
 - Automatic runtime switching from `node` to `tsx` when decorators are detected
+- Uses `require.resolve()` with `paths` option to check user's project dependencies
 
 ## 0.1.0
 

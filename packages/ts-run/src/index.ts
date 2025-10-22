@@ -4,4 +4,4 @@ export {
 	detectPackageManagerFromUserAgent,
 	getRuntime,
 	type PackageManager,
-} from "./detector";
+} from "./detector.js";

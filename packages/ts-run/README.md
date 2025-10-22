@@ -66,7 +66,8 @@ Detection is based on lock files:
 
 - Automatically detects decorator syntax (`@DecoratorName`)
 - Switches to [tsx](https://github.com/privatenumber/tsx) for proper transpilation
-- Requires `tsx` to be installed (added as optional dependency)
+- **Requires `tsx` to be installed in your project** (install manually: `npm i -D tsx`)
+- `ts-run` stays lightweight - no bundled transpiler dependencies
 
 **For Bun/Deno:**
 
@@ -76,37 +77,44 @@ Detection is based on lock files:
 
 ```typescript
 function ClassDecorator(target: any) {
-    console.log("ClassDecorator", target);
-    return target;
+  console.log("ClassDecorator", target);
+  return target;
 }
 
 @ClassDecorator
 class Person {
-    name: string;
-    constructor(name: string) {
-        this.name = name;
-    }
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
 }
 ```
 
 ```bash
-# Just run it - decorator detection is automatic!
+# First time: install tsx in your project
+npm install -D tsx
+# or: pnpm add -D tsx
+# or: yarn add -D tsx
+
+# Then just run it - decorator detection is automatic!
 ts-run app.ts
 ```
 
-**If tsx is not installed**, you'll get a helpful error message:
+**If tsx is not installed**, you'll get a helpful error message with the right command for your package manager:
 
 ```bash
-Error: Decorators detected but tsx is not installed.
-To use decorators with Node.js, install tsx:
-  npm install -D tsx
-  # or
-  pnpm add -D tsx
-  # or
-  yarn add -D tsx
+✗ Error: TypeScript decorators are not supported by Node.js natively.
 
-Alternatively, use Bun or Deno which have native decorator support.
+📦 Solution 1: Install tsx in your project (recommended for Node.js)
+  pnpm add -D tsx    # Shows your actual package manager command
+
+🚀 Solution 2: Use Bun or Deno (native decorator support)
+  They support decorators out of the box, no extra dependencies needed!
+
+Note: Node.js --experimental-transform-types only strips types, it doesn't transpile decorators.
 ```
+
+**Why no bundled tsx?** To keep `ts-run` lightweight and let you control your dependencies!
 
 ### Environment Files
 
@@ -178,13 +186,13 @@ ts-task --list
 
 `ts-task` detects your package manager and uses the appropriate command:
 
-| Package Manager | Command                |
-| --------------- | ---------------------- |
-| npm             | `npm run <script>`     |
-| yarn            | `yarn run <script>`    |
-| pnpm            | `pnpm run <script>`    |
-| bun             | `bun run <script>`     |
-| deno            | `deno task <script>`   |
+| Package Manager | Command              |
+| --------------- | -------------------- |
+| npm             | `npm run <script>`   |
+| yarn            | `yarn run <script>`  |
+| pnpm            | `pnpm run <script>`  |
+| bun             | `bun run <script>`   |
+| deno            | `deno task <script>` |
 
 ### Options
 

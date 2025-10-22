@@ -2,6 +2,7 @@
   "name": "@devzolo/ts-run",
   "version": "0.1.0",
   "description": "Execute TypeScript/JavaScript and package.json scripts with the appropriate runtime and package manager",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -59,9 +60,6 @@
   "devDependencies": {
     "@types/node": "^24.7.2",
     "typescript": "^5.9.3"
-  },
-  "optionalDependencies": {
-    "tsx": "^4.19.2"
   },
   "engines": {
     "node": ">=22.6.0"
